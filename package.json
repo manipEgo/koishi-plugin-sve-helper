@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-sve-helper",
-  "description": "",
+  "description": "Unofficial card search plugin for Shadowverse Evolve (SVE) based on sve-helper and Koishi.",
   "version": "0.0.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -9,10 +9,16 @@
     "dist"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manipEgo/koishi-plugin-sve-helper.git"
+  },
   "keywords": [
     "chatbot",
     "koishi",
-    "plugin"
+    "plugin",
+    "shadowverse",
+    "sve"
   ],
   "peerDependencies": {
     "koishi": "^4.18.0"
