@@ -1,4 +1,4 @@
-import { Context, Schema, h } from 'koishi'
+import { Context, Session, Schema, h } from 'koishi'
 
 export const name = 'sve-helper'
 
@@ -91,10 +91,10 @@ async function findBackCards(ctx: Context, cards: Card[]) {
   })
 }
 
-function makeCardMessage(ctx: Context, card: Card) {
+function makeCardMessage(ctx: Context, session: Session, card: Card) {
   let cardImgUrl = parseCardImagePath(card)
   ctx.logger('sve-helper').info(`inferred image url (please report if incorrect) | ${card.name_cn}: ${cardImgUrl}`)
-  return h('message', h('img', {src: cardImgUrl}), `${card.name_cn}\n${card.desc_cn}`)
+  return h('message', {'id': session.bot.selfId}, h('img', {src: cardImgUrl}), `${card.name_cn}\n${card.desc_cn}`)
 }
 
 export function apply(ctx: Context) {
@@ -135,7 +135,7 @@ export function apply(ctx: Context) {
       }
       const backCards = await findBackCards(ctx, cards)
       cards.push(...backCards)
-      session.send(h('message', { 'forward': true }, cards.map((card: Card) => makeCardMessage(ctx, card))))
+      session.send(h('message', { 'forward': true }, cards.map((card: Card) => makeCardMessage(ctx, session, card))))
       ctx.logger('sve-helper').info('查询成功')
     })
 }
