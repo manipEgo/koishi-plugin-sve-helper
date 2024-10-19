@@ -47,7 +47,7 @@ type Card = {
 
 const queryUrl = 'https://www.svehelperwin.com/api/card/getCardList'
 const imgUrl = 'https://shadowverse-evolve.com/wordpress/wp-content/images/cardlist' // /from/card_no.png
-const imgBackUrl = 'https://www.svehelperwin.com/api/backCard/getCardByCardNo'
+const backCardUrl = 'https://www.svehelperwin.com/api/backCard/getCardByCardNo'
 
 function parseCardImagePath(card: Card) {
   let imgName = `${card.card_no}`
@@ -77,7 +77,7 @@ async function findBackCards(ctx: Context, cards: Card[]) {
     for (let i = 0; i < cards.length; i++) {
     if (cards[i].has_back) {
         const res = await ctx.http.post(
-          imgBackUrl,
+          backCardUrl,
           {card_no: cards[i].card_no}
         )
         if (res.code === 200) {
