@@ -1,37 +1,48 @@
-// SVECraftName: {
-//     Neutral: "中立",
-//     Nightmare: "梦魇",
-//     Forest: "精灵",
-//     Dragon: "龙族",
-//     Haven: "主教",
-//     Rune: "巫师",
-//     Sword: "皇家"
-// },
+enum SVECraftName {
+    "Forest" = "Forest",
+    "精灵" = "Forest",
+    "妖" = "Forest",
+    "Sword" = "Sword",
+    "皇家" = "Sword",
+    "皇" = "Sword",
+    "Rune" = "Rune",
+    "巫师" = "Rune",
+    "法" = "Rune",
+    "Dragon" = "Dragon",
+    "龙族" = "Dragon",
+    "龙" = "Dragon",
+    "Nightmare" = "Nightmare",
+    "梦魇" = "Nightmare",
+    "梦" = "Nightmare",
+    "Haven" = "Haven",
+    "主教" = "Haven",
+    "教" = "Haven",
+    "Neutral" = "Neutral",
+    "中立" = "Neutral",
+}
 
-// ["Forest", "Sword", "Rune", "Dragon", "Nightmare", "Haven", "Neutral"]
-
-// Ze = {
-//   0: "入场曲",
-//   1: "谢幕曲",
-//   2: "启动",
-//   3: "进化",
-//   4: "进化时",
-//   5: "疾驰",
-//   6: "突进",
-//   7: "守护",
-//   8: "吸血",
-//   9: "必杀",
-//   10: "真红",
-//   11: "觉醒",
-//   12: "指定攻击",
-//   13: "威压",
-//   14: "灵气",
-//   15: "死灵充能",
-//   16: "魔力连锁",
-//   17: "快速",
-//   18: "积蓄",
-//   19: "土之秘术"
-// }
+enum SVEAbilityName {
+    "入场曲" = 0,
+    "谢幕曲" = 1,
+    "启动" = 2,
+    "进化" = 3,
+    "进化时" = 4,
+    "疾驰" = 5,
+    "突进" = 6,
+    "守护" = 7,
+    "吸血" = 8,
+    "必杀" = 9,
+    "真红" = 10,
+    "觉醒" = 11,
+    "指定攻击" = 12,
+    "威压" = 13,
+    "灵气" = 14,
+    "死灵充能" = 15,
+    "魔力连锁" = 16,
+    "快速" = 17,
+    "积蓄" = 18,
+    "土之秘术" = 19
+}
 
 type QueryPayload = {
     from: string[],

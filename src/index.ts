@@ -6,45 +6,6 @@ export interface Config {}
 
 export const Config: Schema<Config> = Schema.object({})
 
-type QueryPayload = {
-  from: string[],
-  card_type: string[],
-  rare: string[],
-  cost: number[],
-  craft: string[],
-  race: number[],
-  sort_by: string,
-  ability: number[],
-  name: string,
-  pageable: {
-    limit: number,
-    offset: number
-  }
-}
-type Card = {
-  id: number,
-  card_no: string,
-  name_jp: string,
-  name_cn: string,
-  craft: string,
-  card_type: string,
-  type: string,
-  rare: string,
-  from: string,
-  cost: number,
-  attack: number,
-  life: number,
-  desc_jp: string,
-  desc_cn: string,
-  drawer: string,
-  img_url: string,
-  related_card_nos?: string,
-  created_at: number,
-  speech: string,
-  title: string,
-  has_back: number
-}
-
 const queryUrl = 'https://www.svehelperwin.com/api/card/getCardList'
 const imgUrl = 'https://shadowverse-evolve.com/wordpress/wp-content/images/cardlist' // /from/card_no.png
 const backCardUrl = 'https://www.svehelperwin.com/api/backCard/getCardByCardNo'
@@ -101,16 +62,23 @@ export function apply(ctx: Context) {
   ctx.command('sve-helper <query>')
     .option('limit', '-n <limit>')
     .option('offset', '-o <offset>')
+    .option('from', '-f <from>')
+    .option('card_type', '-t <card_type>')
+    .option('rare', '-rr <rare>')
+    .option('cost', '-cc <cost>')
+    .option('craft', '-ct <craft>')
+    .option('race', '-rc <race>')
+    .option('ability', '-a <ability>')
     .action(async ({session, options}, query) => {
       const payload: QueryPayload = {
-        from: [],
-        card_type: [],
-        rare: [],
-        cost: [],
-        craft: [],
+        from: options.from ? options.from.toUpperCase().split(',') : [],
+        card_type: options.card_type ? options.card_type.split(',') : [],
+        rare: options.rare ? options.rare.split(',') : [],
+        cost: options.cost ? options.cost.split(',').map(Number) : [],
+        craft: options.craft ? options.craft.split(',').map((craft: string) => SVECraftName[craft] || '') : [],
         race: [],
-        sort_by: 'cost',
-        ability: [],
+        sort_by: 'byCostAsc',
+        ability: options.ability ? options.ability.split(',').map((ability: string) => SVEAbilityName[ability] || null) : [],
         name: query,
         pageable: {
           limit: Number(options.limit) || 5,
