@@ -1,26 +1,3 @@
-enum SVECraftName {
-    "Forest" = "Forest",
-    "精灵" = "Forest",
-    "妖" = "Forest",
-    "Sword" = "Sword",
-    "皇家" = "Sword",
-    "皇" = "Sword",
-    "Rune" = "Rune",
-    "巫师" = "Rune",
-    "法" = "Rune",
-    "Dragon" = "Dragon",
-    "龙族" = "Dragon",
-    "龙" = "Dragon",
-    "Nightmare" = "Nightmare",
-    "梦魇" = "Nightmare",
-    "梦" = "Nightmare",
-    "Haven" = "Haven",
-    "主教" = "Haven",
-    "教" = "Haven",
-    "Neutral" = "Neutral",
-    "中立" = "Neutral",
-}
-
 enum SVEAbilityName {
     "入场曲" = 0,
     "谢幕曲" = 1,
@@ -44,4 +21,68 @@ enum SVEAbilityName {
     "土之秘术" = 19
 }
 
-export {SVEAbilityName, SVECraftName}
+enum SVECardTypeName {
+    "Follower" = "Follower",
+    "从者" = "Follower",
+    "FollowerEvo" = "FollowerEvo",
+    "从者·进化" = "FollowerEvo",
+    "进化" = "FollowerEvo",
+    "FollowerAdv" = "FollowerAdv",
+    "从者·Advance" = "FollowerAdv",
+    "Advance" = "FollowerAdv",
+    "Spell" = "Spell",
+    "法术" = "Spell",
+    "SpellEvo" = "SpellEvo",
+    "法术·进化" = "SpellEvo",
+    "法术进化" = "SpellEvo",
+    "SpellAdv" = "SpellAdv",
+    "法术·Advance" = "SpellAdv",
+    "法术Advance" = "SpellAdv",
+    "Amulet" = "Amulet",
+    "护符" = "Amulet",
+    "AmuletEvo" = "AmuletEvo",
+    "护符·进化" = "AmuletEvo",
+    "护符进化" = "AmuletEvo",
+    "AmuletAdv" = "AmuletAdv",
+    "护符·Advance" = "AmuletAdv",
+    "护符Advance" = "AmuletAdv",
+    "Leader" = "Leader",
+    "主战者" = "Leader",
+    "FollowerToken" = "FollowerToken",
+    "从者·Token" = "FollowerToken",
+    "从者Token" = "FollowerToken",
+    "SpellToken" = "SpellToken",
+    "法术·Token" = "SpellToken",
+    "法术Token" = "SpellToken",
+    "AmuletToken" = "AmuletToken",
+    "护符·Token" = "AmuletToken",
+    "护符Token" = "AmuletToken",
+    "Token" = "FollowerToken,SpellToken,AmuletToken",
+    "Other" = "Other",
+    "其他" = "Other"
+}
+
+enum SVECraftName {
+    "Forest" = "Forest",
+    "精灵" = "Forest",
+    "妖" = "Forest",
+    "Sword" = "Sword",
+    "皇家" = "Sword",
+    "皇" = "Sword",
+    "Rune" = "Rune",
+    "巫师" = "Rune",
+    "法" = "Rune",
+    "Dragon" = "Dragon",
+    "龙族" = "Dragon",
+    "龙" = "Dragon",
+    "Nightmare" = "Nightmare",
+    "梦魇" = "Nightmare",
+    "梦" = "Nightmare",
+    "Haven" = "Haven",
+    "主教" = "Haven",
+    "教" = "Haven",
+    "Neutral" = "Neutral",
+    "中立" = "Neutral"
+}
+
+export {SVEAbilityName, SVECardTypeName, SVECraftName}
