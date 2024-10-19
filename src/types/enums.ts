@@ -57,9 +57,22 @@ enum SVECardTypeName {
     "AmuletToken" = "AmuletToken",
     "护符·Token" = "AmuletToken",
     "护符Token" = "AmuletToken",
-    "Token" = "FollowerToken,SpellToken,AmuletToken",
     "Other" = "Other",
-    "其他" = "Other"
+    "其他" = "Other",
+    "follower" = "Follower",
+    "followerevo" = "FollowerEvo",
+    "followeradv" = "FollowerAdv",
+    "spell" = "Spell",
+    "spellevo" = "SpellEvo",
+    "spelladv" = "SpellAdv",
+    "amulet" = "Amulet",
+    "amuletevo" = "AmuletEvo",
+    "amuletadv" = "AmuletAdv",
+    "leader" = "Leader",
+    "followertoken" = "FollowerToken",
+    "spelltoken" = "SpellToken",
+    "amulettoken" = "AmuletToken",
+    "other" = "Other"
 }
 
 enum SVECraftName {
@@ -82,7 +95,14 @@ enum SVECraftName {
     "主教" = "Haven",
     "教" = "Haven",
     "Neutral" = "Neutral",
-    "中立" = "Neutral"
+    "中立" = "Neutral",
+    "forest" = "Forest",
+    "sword" = "Sword",
+    "rune" = "Rune",
+    "dragon" = "Dragon",
+    "nightmare" = "Nightmare",
+    "haven" = "Haven",
+    "neutral" = "Neutral"
 }
 
 export {SVEAbilityName, SVECardTypeName, SVECraftName}

@@ -1,5 +1,5 @@
 import { Context, Session, Schema, h } from 'koishi'
-import { SVEAbilityName, SVECraftName } from './types/enums'
+import { SVEAbilityName, SVECardTypeName, SVECraftName } from './types/enums'
 
 export const name = 'sve-helper'
 
@@ -61,6 +61,7 @@ function makeCardMessage(ctx: Context, session: Session, card: Card) {
 
 export function apply(ctx: Context) {
   ctx.command('sve-helper <query>')
+    .alias('sve')
     .option('limit', '-n <limit>')
     .option('offset', '-o <offset>')
     .option('from', '-f <from>')
@@ -73,10 +74,10 @@ export function apply(ctx: Context) {
     .action(async ({session, options}, query) => {
       const payload: QueryPayload = {
         from: options.from ? options.from.toUpperCase().split(',') : [],
-        card_type: options.card_type ? options.card_type.split(',') : [],
-        rare: options.rare ? options.rare.split(',') : [],
+        card_type: options.card_type ? options.card_type.toLowerCase().replace('token', 'FollowerToken,SpellToken,AmuletToken').split(',').map((cardType: string) => SVECardTypeName[cardType] || '') : [],
+        rare: options.rare ? options.rare.toUpperCase().split(',') : [],
         cost: options.cost ? options.cost.split(',').map(Number) : [],
-        craft: options.craft ? options.craft.split(',').map((craft: string) => SVECraftName[craft] || '') : [],
+        craft: options.craft ? options.craft.toLowerCase().split(',').map((craft: string) => SVECraftName[craft] || '') : [],
         race: [],
         sort_by: 'byCostAsc',
         ability: options.ability ? options.ability.split(',').map((ability: string) => SVEAbilityName[ability] || null) : [],
