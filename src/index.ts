@@ -15,10 +15,10 @@ function parseCardImagePath(card: Card) {
   if (!card.from.startsWith('SD')) {
     imgName = imgName.toLowerCase()
   }
-  if (card.from in ["BP01", "BP02", "SD"]) {
+  if (["BP01", "BP02", "SD"].includes(card.from)) {
     imgName = `${imgName.replace('-', '_')}`
   }
-  if (imgName in ["bp03-u03", "bp03-u04", "bp03-u06"]) {
+  if (["bp03-u03", "bp03-u04", "bp03-u06"].includes(imgName)) {
     imgName = `${imgName}-2`
   }
   imgName = imgName === 'cp01-p33' ? 'cp01-p330' : imgName === 'etd01-002' ? 'etd01-002%20' : imgName === 'cp03-124' ? 'cp03-124re' : imgName === 'cp03-004' ? 'cp03-004re' : imgName
