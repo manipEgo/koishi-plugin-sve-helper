@@ -99,7 +99,7 @@ function makeCardMessage(ctx: Context, card: Card) {
 
 export function apply(ctx: Context) {
   ctx.command('sve-helper <query>')
-    .option('number', '-n <number>')
+    .option('limit', '-n <limit>')
     .option('offset', '-o <offset>')
     .action(async ({session, options}, query) => {
       const payload: QueryPayload = {
@@ -113,8 +113,8 @@ export function apply(ctx: Context) {
         ability: [],
         name: query,
         pageable: {
-          limit: options.number || 5,
-          offset: options.offset || 0
+          limit: Number(options.limit) || 5,
+          offset: Number(options.offset) || 0
         }
       }
       const res = await ctx.http.post(
