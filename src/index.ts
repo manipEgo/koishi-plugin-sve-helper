@@ -71,15 +71,37 @@ function parseCardImagePath(card: Card) {
   return `${imgUrl}/${card.from}/${imgName}.png`
 }
 
+async function findBackCards(ctx: Context, cards: Card[]) {
+  return new Promise<Card[]>(async resolve => {
+    let backCards = []
+    for (let i = 0; i < cards.length; i++) {
+    if (cards[i].has_back) {
+        const res = await ctx.http.post(
+          imgBackUrl,
+          {card_no: cards[i].card_no}
+        )
+        if (res.code === 200) {
+          let backData = res.data
+          backData.has_back = -1
+          backCards.push(backData)
+        }
+      }
+    }
+    resolve(backCards)
+  })
+}
+
 function makeCardMessage(ctx: Context, card: Card) {
   let cardImgUrl = parseCardImagePath(card)
-  ctx.logger('sve-helper').info(`inferred image url (please report if incorrect): ${cardImgUrl}`)
+  ctx.logger('sve-helper').info(`inferred image url (please report if incorrect) | ${card.name_cn}: ${cardImgUrl}`)
   return h('message', h('img', {src: cardImgUrl}), `${card.name_cn}\n${card.desc_cn}`)
 }
 
 export function apply(ctx: Context) {
   ctx.command('sve-helper <query>')
-    .action(({session}, query) => {
+    .option('number', '-n <number>')
+    .option('offset', '-o <offset>')
+    .action(async ({session, options}, query) => {
       const payload: QueryPayload = {
         from: [],
         card_type: [],
@@ -91,38 +113,29 @@ export function apply(ctx: Context) {
         ability: [],
         name: query,
         pageable: {
-          limit: 5,
-          offset: 0
+          limit: options.number || 5,
+          offset: options.offset || 0
         }
       }
-      return ctx.http.post(
+      const res = await ctx.http.post(
         queryUrl,
         payload
-      ).then((res) => {
-        if (res.code !== 200) {
-          ctx.logger('sve-helper').warn('查询失败', res.data)
-          return '查询失败'
-        }
-        const cards = res.data.list
-        if (cards.length === 0) {
-          return '未找到卡片'
-        }
-        // card has back, append back card
-        cards.forEach((card: Card) => {
-          if (card.has_back) {
-            ctx.http.post(
-              imgBackUrl,
-              {card_no: card.card_no}
-            ).then((res) => {
-              if (res.code === 200) {
-                let backData = res.data
-                backData.has_back = -1
-                cards.push(backData)
-              }
-            })
-          }
-        })
-        session.send(h('message', {'forward': true}, cards.map((card: Card) => makeCardMessage(ctx, card))))
-      })
+      )
+      if (res.code !== 200) {
+        ctx.logger('sve-helper').warn('查询失败', res.data)
+        return '查询失败'
+      }
+      if (!res.data || !res.data.list) {
+        ctx.logger('sve-helper').warn('响应数据无效', res.data)
+        return '响应数据无效'
+      }
+      const cards = res.data.list
+      if (cards.length === 0) {
+        return '未找到卡片'
+      }
+      const backCards = await findBackCards(ctx, cards)
+      cards.push(...backCards)
+      session.send(h('message', { 'forward': true }, cards.map((card: Card) => makeCardMessage(ctx, card))))
+      ctx.logger('sve-helper').info('查询成功')
     })
 }
