@@ -1,4 +1,5 @@
 import { Context, Session, Schema, h } from 'koishi'
+import { SVEAbilityName, SVECraftName } from './types/enums'
 
 export const name = 'sve-helper'
 
@@ -64,10 +65,10 @@ export function apply(ctx: Context) {
     .option('offset', '-o <offset>')
     .option('from', '-f <from>')
     .option('card_type', '-t <card_type>')
-    .option('rare', '-rr <rare>')
-    .option('cost', '-cc <cost>')
-    .option('craft', '-ct <craft>')
-    .option('race', '-rc <race>')
+    .option('rare', '-R <rare>')
+    .option('cost', '-c <cost>')
+    .option('craft', '-C <craft>')
+    .option('race', '-r <race>')
     .option('ability', '-a <ability>')
     .action(async ({session, options}, query) => {
       const payload: QueryPayload = {
