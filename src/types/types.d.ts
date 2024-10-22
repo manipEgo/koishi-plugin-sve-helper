@@ -36,3 +36,9 @@ declare type Card = {
     title: string,
     has_back: number
 }
+
+declare type Race = {
+    id: number,
+    jp_name: string,
+    cn_name: string,
+}

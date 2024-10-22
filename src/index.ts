@@ -7,9 +7,11 @@ export interface Config {}
 
 export const Config: Schema<Config> = Schema.object({})
 
-const queryUrl = 'https://www.svehelperwin.com/api/card/getCardList'
+const sveHelperUrl = 'https://www.svehelperwin.com'
+const raceUrl = sveHelperUrl + '/api/race/getAll'
+const queryUrl = sveHelperUrl + '/api/card/getCardList'
+const backCardUrl = sveHelperUrl + '/api/backCard/getCardByCardNo'
 const imgUrl = 'https://shadowverse-evolve.com/wordpress/wp-content/images/cardlist' // /from/card_no.png
-const backCardUrl = 'https://www.svehelperwin.com/api/backCard/getCardByCardNo'
 
 function parseCardImagePath(card: Card) {
   let imgName = `${card.card_no}`
@@ -72,13 +74,35 @@ export function apply(ctx: Context) {
     .option('race', '-r <race>')
     .option('ability', '-a <ability>')
     .action(async ({session, options}, query) => {
+      let raceIds = []
+      if (options.race) {
+        let raceQuery = options.race.split(',')
+        const race_res = await ctx.http.post(
+          raceUrl,
+          {
+            "headers": {
+              "Host": sveHelperUrl,
+            }
+          }
+        )
+        if (race_res.code !== 200) {
+          ctx.logger('sve-helper').warn('获取卡牌类型列表失败', race_res.data)
+          return '获取卡牌类型列表失败'
+        }
+        const raceList = race_res.data
+        if (!raceList) {
+          ctx.logger('sve-helper').warn('获取卡牌类型列表 - 响应数据无效', race_res.data)
+          return '获取卡牌类型列表 - 响应数据无效'
+        }
+        raceIds = raceList.filter((raceItem: Race) => raceQuery.includes(raceItem.jp_name) || raceQuery.includes(raceItem.cn_name)).map(raceItem => raceItem.id)
+      }
       const payload: QueryPayload = {
         from: options.from ? options.from.toUpperCase().split(',') : [],
         card_type: options.card_type ? options.card_type.toLowerCase().replace('token', 'FollowerToken,SpellToken,AmuletToken').split(',').map((cardType: string) => SVECardTypeName[cardType] || '') : [],
         rare: options.rare ? options.rare.toUpperCase().split(',') : [],
         cost: options.cost ? options.cost.split(',').map(Number) : [],
         craft: options.craft ? options.craft.toLowerCase().split(',').map((craft: string) => SVECraftName[craft] || '') : [],
-        race: [],
+        race: raceIds,
         sort_by: 'byCostAsc',
         ability: options.ability ? options.ability.split(',').map((ability: string) => SVEAbilityName[ability] || null) : [],
         name: query,
