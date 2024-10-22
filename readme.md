@@ -8,8 +8,8 @@ Unofficial card search plugin for Shadowverse Evolve (SVE) based on sve-helper a
 ## TODO List
 
  - [x] 基本检索
- - [ ] 高级检索
- - [ ] 数量参数
+ - [x] 高级检索
+ - [x] 数量参数
  - [ ] 去重参数
  - [ ] 各参数设置页面
 
