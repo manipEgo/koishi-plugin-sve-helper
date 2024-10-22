@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-sve-helper",
   "description": "Unofficial card search plugin for Shadowverse Evolve (SVE) based on sve-helper and Koishi.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -9,6 +9,7 @@
     "dist"
   ],
   "license": "MIT",
+  "homepage": "https://github.com/manipEgo/koishi-plugin-sve-helper",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/manipEgo/koishi-plugin-sve-helper.git"
