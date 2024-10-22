@@ -1,6 +1,12 @@
 import { Context, Session, Schema, h } from 'koishi'
 import { SVEAbilityName, SVECardTypeName, SVECraftName } from './types/enums'
 
+import { version, homepage } from "../package.json";
+
+const developer = "manipEgo";
+const appName = "koishi-plugin-sve-helper";
+const userAgent = `${developer}/${appName}/${version} (${homepage})`;
+
 export const name = 'sve-helper'
 
 export interface Config {}
@@ -42,7 +48,12 @@ async function findBackCards(ctx: Context, cards: Card[]) {
     if (cards[i].has_back) {
         const res = await ctx.http.post(
           backCardUrl,
-          {card_no: cards[i].card_no}
+          {card_no: cards[i].card_no},
+          {
+            "headers": {
+              "User-Agent": userAgent
+            }
+          }
         )
         if (res.code === 200) {
           let backData = res.data
@@ -82,6 +93,7 @@ export function apply(ctx: Context) {
           {
             "headers": {
               "Host": sveHelperUrl,
+              "User-Agent": userAgent
             }
           }
         )
@@ -113,7 +125,12 @@ export function apply(ctx: Context) {
       }
       const res = await ctx.http.post(
         queryUrl,
-        payload
+        payload,
+        {
+          "headers": {
+            "User-Agent": userAgent
+          }
+        }
       )
       if (res.code !== 200) {
         ctx.logger('sve-helper').warn('查询失败', res.data)
