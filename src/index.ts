@@ -62,17 +62,17 @@ function makeCardMessage(ctx: Context, session: Session, card: Card) {
 }
 
 export function apply(ctx: Context) {
-  ctx.command('sve-helper <query>')
+  ctx.command('sve-helper <query>', '影之诗卡牌查询')
     .alias('sve')
-    .option('limit', '-n <limit>')
-    .option('offset', '-o <offset>')
-    .option('from', '-f <from>')
-    .option('card_type', '-t <card_type>')
-    .option('rare', '-R <rare>')
-    .option('cost', '-c <cost>')
-    .option('craft', '-C <craft>')
-    .option('race', '-r <race>')
-    .option('ability', '-a <ability>')
+    .option('limit', '-n <limit> 返回数量')
+    .option('offset', '-o <offset> 偏移量')
+    .option('cost', '-c <cost> 费用')
+    .option('race', '-r <race> 类型')
+    .option('rare', '-R <rare> 罕度')
+    .option('from', '-f <from> 卡包')
+    .option('craft', '-C <craft> 职业')
+    .option('ability', '-a <ability> 能力')
+    .option('card_type', '-t <card_type> 卡牌种类')
     .action(async ({session, options}, query) => {
       let raceIds = []
       if (options.race) {
