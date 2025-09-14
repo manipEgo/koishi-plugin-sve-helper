@@ -22,6 +22,21 @@ this is an unofficial plugin using APIs from [Shadowverse-Evolve Helper](https:/
 
 ## Update Log
 
+### v1.1.0
+
+commit id: `245f1a03df6941bf355940f2e2d185ac757cceba`
+
+#### 新增：
+
+ - 支持双面卡返回正反面两张查询结果
+ - 支持根据编号查询 PR 卡图
+
+#### 修复：
+
+ - 因单个结果图片路径错误导致整个查询结果无法发送：现在错误图片返回文字提醒，不影响其他图片
+ - 更新了图片路径命名规则，减少了无法显示图片数量
+
+
 ### v1.0.0
 
 commit id: `efb16bef9d025a0433e2f435907bd497419e5ee0`
