@@ -66,10 +66,15 @@ async function findBackCards(ctx: Context, cards: Card[]) {
   })
 }
 
-function makeCardMessage(ctx: Context, session: Session, card: Card) {
-  let cardImgUrl = parseCardImagePath(card)
+async function makeCardMessage(ctx: Context, session: Session, card: Card) {
+  const cardImgUrl = parseCardImagePath(card)
   ctx.logger('sve-helper').info(`inferred image url (please report if incorrect) | ${card.name_cn}: ${cardImgUrl}`)
-  return h('message', h('img', {src: cardImgUrl}), `${card.name_cn}\n${card.desc_cn}`)
+  try {
+    await ctx.http.head(cardImgUrl)
+  } catch {
+    return h('message', `[图片加载失败]\n${card.name_cn}\n${card.desc_cn}`)
+  }
+  return h('message', h('img', { src: cardImgUrl }), `${card.name_cn}\n${card.desc_cn}`)
 }
 
 export function apply(ctx: Context) {
@@ -144,9 +149,8 @@ export function apply(ctx: Context) {
       if (cards.length === 0) {
         return '未找到卡片'
       }
-      const backCards = await findBackCards(ctx, cards)
-      cards.push(...backCards)
-      session.send(h('message', { 'forward': true }, cards.map((card: Card) => makeCardMessage(ctx, session, card))))
-      ctx.logger('sve-helper').info('查询成功')
+      const messages = await Promise.all(cards.map((card: Card) => makeCardMessage(ctx, session, card)))
+      session.send(h('message', { 'forward': true }, messages))
+      ctx.logger('sve-helper').info('查询完成')
     })
 }
