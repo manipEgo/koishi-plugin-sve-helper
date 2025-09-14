@@ -65,29 +65,22 @@ function parseCardImagePath(card: Card) {
   return `${imgUrl}/${cardSet}/${imgName}.png`
 }
 
-async function findBackCards(ctx: Context, cards: Card[]) {
-  return new Promise<Card[]>(async resolve => {
-    let backCards = []
-    for (let i = 0; i < cards.length; i++) {
-    if (cards[i].has_back) {
-        const res = await ctx.http.post(
-          backCardUrl,
-          {card_no: cards[i].card_no},
-          {
-            "headers": {
-              "User-Agent": userAgent
-            }
-          }
-        )
-        if (res.code === 200) {
-          let backData = res.data
-          backData.has_back = -1
-          backCards.push(backData)
-        }
+async function getBackCard(ctx: Context, card: Card) {
+  const res = await ctx.http.post(
+    backCardUrl,
+    { card_no: card.card_no },
+    {
+      "headers": {
+        "User-Agent": userAgent
       }
     }
-    resolve(backCards)
-  })
+  )
+  if (res.code === 200) {
+    let backData = res.data
+    backData.has_back = -1
+    return backData
+  }
+  return null
 }
 
 async function makeCardMessage(ctx: Context, session: Session, card: Card) {
@@ -137,6 +130,7 @@ export function apply(ctx: Context) {
         }
         raceIds = raceList.filter((raceItem: Race) => raceQuery.includes(raceItem.jp_name) || raceQuery.includes(raceItem.cn_name)).map(raceItem => raceItem.id)
       }
+
       const payload: QueryPayload = {
         from: options.from ? options.from.toUpperCase().split(',') : [],
         card_type: options.card_type ? options.card_type.toLowerCase().replace('token', 'FollowerToken,SpellToken,AmuletToken').split(',').map((cardType: string) => SVECardTypeName[cardType] || '') : [],
@@ -173,6 +167,16 @@ export function apply(ctx: Context) {
       if (cards.length === 0) {
         return '未找到卡片'
       }
+
+      for (let i = 0; i < cards.length; i++) {
+        if (cards[i].has_back === 1) {
+          const backCard = await getBackCard(ctx, cards[i])
+          if (backCard) {
+            cards.splice(i + 1, 0, backCard)
+          }
+        }
+      }
+
       const messages = await Promise.all(cards.map((card: Card) => makeCardMessage(ctx, session, card)))
       session.send(h('message', { 'forward': true }, messages))
       ctx.logger('sve-helper').info('查询完成')
