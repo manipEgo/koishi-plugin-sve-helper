@@ -21,24 +21,48 @@ const imgUrl = 'https://shadowverse-evolve.com/wordpress/wp-content/images/cardl
 
 function parseCardImagePath(card: Card) {
   let imgName = `${card.card_no}`
-  if (!card.from.startsWith('SD')) {
-    imgName = imgName.toLowerCase()
+  imgName = imgName.replace('LDⓈ', 'lds')
+  imgName = imgName.replace('ldⓈ', 'lds')
+
+  const specialPrefixes = ["BP01", "BP02", "SD01", "SD02", "SD03", "SD04", "SD05", "SD06"];
+
+  if (specialPrefixes.some(prefix => card.card_no.startsWith(prefix))) {
+    if (card.card_no.startsWith("BP")) {
+      imgName = imgName.toLowerCase();
+      imgName = imgName.replace("-", "_");
+    }
+  } else {
+    imgName = imgName.toLowerCase();
   }
-  if (["BP01", "BP02", "SD"].includes(card.from)) {
-    imgName = `${imgName.replace('-', '_')}`
-  }
+
   if (["bp03-u03", "bp03-u04", "bp03-u06"].includes(imgName)) {
     imgName = `${imgName}-2`
   }
-  imgName = imgName === 'cp01-p33' ? 'cp01-p330' : imgName === 'etd01-002' ? 'etd01-002%20' : imgName === 'cp03-124' ? 'cp03-124re' : imgName === 'cp03-004' ? 'cp03-004re' : imgName
+
+  if (imgName === "cp01-p33") {
+    imgName = "cp01-p330";
+  } else if (imgName === "etd01-002") {
+    imgName = "etd01-002 ";
+  } else if (imgName === "cp03-124") {
+    imgName = "cp03-124re";
+  } else if (imgName === "cp03-004") {
+    imgName = "cp03-004re";
+  }
+
   if (card.has_back !== 0) {
-    if (imgName.startsWith('bp08')) {
+    if (card.card_no.startsWith("BP08")) {
       imgName = `${imgName}_${card.has_back === -1 ? 'back' : 'front'}`
     } else {
       imgName = `${imgName}${card.has_back === -1 ? '_ura' : ''}`
     }
   }
-  return `${imgUrl}/${card.from}/${imgName}.png`
+
+  let cardSet = card.from;
+  if (card.card_no.startsWith("DSD01")) {
+    cardSet = "DSD01";
+  }
+
+  return `${imgUrl}/${cardSet}/${imgName}.png`
 }
 
 async function findBackCards(ctx: Context, cards: Card[]) {
