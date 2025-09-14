@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-sve-helper",
   "description": "Unofficial card search plugin for Shadowverse Evolve (SVE) based on sve-helper and Koishi.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [

@@ -15,6 +15,8 @@ this is an unofficial plugin using APIs from [Shadowverse-Evolve Helper](https:/
  - [x] 高级检索
  - [x] 数量选项
  - [x] 偏移选项
+ - [x] 双面卡牌
+ - [x] PR卡检索
  - [ ] 去重参数
  - [ ] 各参数设置页面
 
