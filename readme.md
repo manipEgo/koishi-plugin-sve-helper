@@ -9,6 +9,12 @@ Unofficial card search plugin for Shadowverse Evolve (SVE) based on sve-helper a
 
 this is an unofficial plugin using APIs from [Shadowverse-Evolve Helper](https://www.svehelperwin.com/) and [Shadowverse-Evolve Official Website](https://shadowverse-evolve.com/), all credits go to the original author and SVE official.
 
+## Usage
+
+普通查询默认别名 `sve`, 可用参数等请利用 `help` 指令查看
+
+PR 卡查询默认别名 `pr`，支持 `1`, `1,2,3`, `1-3` 三种编号输入格式
+
 ## TODO List
 
  - [x] 基本检索
