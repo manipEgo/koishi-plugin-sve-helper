@@ -83,7 +83,7 @@ async function getBackCard(ctx: Context, card: Card) {
   return null
 }
 
-async function makeCardMessage(ctx: Context, session: Session, card: Card) {
+async function makeCardMessage(ctx: Context, card: Card) {
   const cardImgUrl = parseCardImagePath(card)
   ctx.logger('sve-helper').info(`inferred image url (please report if incorrect) | ${card.name_cn}: ${cardImgUrl}`)
   try {
@@ -92,6 +92,33 @@ async function makeCardMessage(ctx: Context, session: Session, card: Card) {
     return h('message', `[图片加载失败]\n${card.name_cn}\n${card.desc_cn}`)
   }
   return h('message', h('img', { src: cardImgUrl }), `${card.name_cn}\n${card.desc_cn}`)
+}
+
+async function tryGetPRCardImagePath(ctx: Context, prNo: string) {
+  const prUrlPrefix = `${imgUrl}/PR/`
+  const possibleFilenames = [
+    `pr-${prNo.padStart(3, '0')}`,
+    `PR-${prNo.padStart(3, '0')}`,
+    `PR_${prNo.padStart(3, '0')}`
+  ]
+  for (const filename of possibleFilenames) {
+    const imgUrl = `${prUrlPrefix}${filename}.png`
+    try {
+      await ctx.http.head(imgUrl)
+      return imgUrl
+    } catch {
+      continue
+    }
+  }
+  return null
+}
+
+async function makePRCardMessage(ctx: Context, prNo: string) {
+  const cardImgUrl = await tryGetPRCardImagePath(ctx, prNo)
+  if (!cardImgUrl) {
+    return h('message', `[图片加载失败]\nPR-${prNo.padStart(3, '0')}`)
+  }
+  return h('message', h('img', { src: cardImgUrl }), `PR-${prNo.padStart(3, '0')}`)
 }
 
 export function apply(ctx: Context) {
@@ -177,8 +204,25 @@ export function apply(ctx: Context) {
         }
       }
 
-      const messages = await Promise.all(cards.map((card: Card) => makeCardMessage(ctx, session, card)))
+      const messages = await Promise.all(cards.map((card: Card) => makeCardMessage(ctx, card)))
       session.send(h('message', { 'forward': true }, messages))
       ctx.logger('sve-helper').info('查询完成')
     })
+
+    ctx.command('sve-helper-pr <prNos>', '影之诗PR卡牌查询')
+      .alias('pr')
+      .action(async ({ session }, prNos) => {
+        if (!prNos) return '请输入PR卡牌编号'
+        let prNoList = []
+        if (prNos.includes('-')) {
+          const [start, end] = prNos.split('-').map(Number)
+          for (let i = start; i <= end; i++) {
+            prNoList.push(i.toString())
+          }
+        } else {
+          prNoList = prNos.split(',').map(Number).map(String)
+        }
+        const messages = await Promise.all(prNoList.map(prNo => makePRCardMessage(ctx, prNo)))
+        session.send(h('message', { 'forward': true }, messages))
+      })
 }
